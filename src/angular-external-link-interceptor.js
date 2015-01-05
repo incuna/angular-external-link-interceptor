@@ -51,9 +51,6 @@
 
         return {
             restrict: 'E',
-            scope: {
-                href: '@'
-            },
             link: function (scope, element, attrs) {
                 // External url testing function from http://stackoverflow.com/a/6238456
                 function isExternal(url) {
@@ -72,7 +69,7 @@
                         templateUrl: 'templates/external_link/message.html',
                         resolve: {
                             externalUrl: function () {
-                                return scope.href;
+                                return attrs.href;
                             }
                         },
                         controller: ['$scope', '$modalInstance', 'externalUrl', function ($scope, $modalInstance, externalUrl) {
@@ -87,13 +84,13 @@
 
                 // If the link does not have an attribute to allow it to by-pass the warning.
                 if (!attrs.allowExternal) {
-                    scope.$watch('href', function () {
+                    attrs.$observe('href', function (href) {
                         // The click event may have been bound based on a
                         // previous href value.
                         element.unbind('click', externalModal);
-                        if (scope.href) {
+                        if (href) {
                             // If the link is external.
-                            if (isExternal(scope.href)) {
+                            if (isExternal(href)) {
                                 // Rewrite the url to go to the external link route.
                                 // Adds a `next` parameter containing the external link and
                                 // a `prev` parameter containing the current path, so that
