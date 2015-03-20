@@ -50,8 +50,8 @@
     ]);
 
     module.service('ExternalLinkService', [
-        '$modal',
-        function ($modal) {
+        '$filter', '$location', '$modal',
+        function ($filter, $location, $modal) {
 
             var ExternalLinkService = {
                 externalLinkRE: new RegExp(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/),
@@ -97,6 +97,26 @@
                             }
                         ]
                     });
+                },
+                hrefChanged: function (element, newValue) {
+                    // The click event may have been bound based on a
+                    // previous href value.
+                    var clickFunction = function (e) {
+                        ExternalLinkService.externalModal(e, newValue);
+                    };
+                    element.off('click', clickFunction);
+                    if (newValue) {
+                        // If the link is external.
+                        if (ExternalLinkService.isExternal(newValue)) {
+                            // Rewrite the url to go to the external link route.
+                            // Adds a `next` parameter containing the external link and
+                            // a `prev` parameter containing the current path, so that
+                            // we can navigate back to where the user came from.
+                            element.attr('href', $filter('reverseUrl')('ExternalLinkCtrl') + '?next=' + encodeURI(newValue) + '&prev=' + encodeURI($location.path()));
+
+                            element.on('click', clickFunction);
+                        }
+                    }
                 }
             };
 
@@ -105,32 +125,15 @@
     ]);
 
     module.directive('a', [
-        '$filter', '$location', '$modal', 'ExternalLinkService',
-        function ($filter, $location, $modal, ExternalLinkService) {
+        'ExternalLinkService',
+        function (ExternalLinkService) {
             return {
                 restrict: 'E',
                 link: function (scope, element, attrs) {
                     // If the link does not have an attribute to allow it to by-pass the warning.
                     if (!attrs.allowExternal) {
-                        attrs.$observe('href', function (href) {
-                            // The click event may have been bound based on a
-                            // previous href value.
-                            var clickFunction = function (e) {
-                                ExternalLinkService.externalModal(e, attrs.href);
-                            };
-                            element.off('click', clickFunction);
-                            if (href) {
-                                // If the link is external.
-                                if (ExternalLinkService.isExternal(href)) {
-                                    // Rewrite the url to go to the external link route.
-                                    // Adds a `next` parameter containing the external link and
-                                    // a `prev` parameter containing the current path, so that
-                                    // we can navigate back to where the user came from.
-                                    element.attr('href', $filter('reverseUrl')('ExternalLinkCtrl') + '?next=' + encodeURI(attrs.href) + '&prev=' + encodeURI($location.path()));
-
-                                    element.on('click', clickFunction);
-                                }
-                            }
+                        attrs.$observe('href', function (newValue) {
+                            ExternalLinkService.hrefChanged(element, newValue);
                         });
                     }
                 }
