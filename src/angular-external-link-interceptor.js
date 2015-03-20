@@ -34,27 +34,30 @@
         }
     ]);
 
-    module.controller('ExternalLinkCtrl', ['$scope', '$location', function ($scope, $location) {
-        $scope.externalUrl = $location.$$search.next;
+    module.controller('ExternalLinkCtrl', [
+        '$scope', '$location',
+        function ($scope, $location) {
+            $scope.externalUrl = $location.$$search.next;
 
-        $scope.cancel = function () {
-            if ($location.$$search.prev) {
-                $location.url($location.$$search.prev);
-            } else {
-                $location.url('/');
-            }
-        };
-    }]);
+            $scope.cancel = function () {
+                if ($location.$$search.prev) {
+                    $location.url($location.$$search.prev);
+                } else {
+                    $location.url('/');
+                }
+            };
+        }
+    ]);
 
-    module.directive('a', ['$filter', '$location', '$modal', function ($filter, $location, $modal) {
-        var externalLinkRE = new RegExp(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
+    module.service('ExternalLinkService', [
+        '$modal',
+        function ($modal) {
 
-        return {
-            restrict: 'E',
-            link: function (scope, element, attrs) {
+            var ExternalLinkService = {
+                externalLinkRE: new RegExp(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/),
                 // External url testing function from http://stackoverflow.com/a/6238456
-                var isExternal = function (url) {
-                    var match = url.match(externalLinkRE);
+                isExternal: function (url) {
+                    var match = url.match(ExternalLinkService.externalLinkRE);
 
                     if (typeof match[1] === 'string' && match[1].length > 0) {
                         if (match[1] === 'mailto:' || match[1] === 'tel:') {
@@ -71,9 +74,8 @@
                         'https:': 443
                     }[location.protocol] + ')?$'), '') !== location.host) { return true; }
                     return false;
-                };
-
-                var externalModal = function (e) {
+                },
+                externalModal: function (e, href) {
                     e.preventDefault();
 
                     // Open a bootstrap-ui modal.
@@ -81,41 +83,59 @@
                         templateUrl: 'templates/external_link/message.html',
                         resolve: {
                             externalUrl: function () {
-                                return attrs.href;
+                                return href;
                             }
                         },
-                        controller: ['$scope', '$modalInstance', 'externalUrl', function ($scope, $modalInstance, externalUrl) {
-                            $scope.externalUrl = externalUrl;
+                        controller: [
+                            '$scope', '$modalInstance', 'externalUrl',
+                            function ($scope, $modalInstance, externalUrl) {
+                                $scope.externalUrl = externalUrl;
 
-                            $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
-                            };
-                        }]
-                    });
-                };
-
-                // If the link does not have an attribute to allow it to by-pass the warning.
-                if (!attrs.allowExternal) {
-                    attrs.$observe('href', function (href) {
-                        // The click event may have been bound based on a
-                        // previous href value.
-                        element.unbind('click', externalModal);
-                        if (href) {
-                            // If the link is external.
-                            if (isExternal(href)) {
-                                // Rewrite the url to go to the external link route.
-                                // Adds a `next` parameter containing the external link and
-                                // a `prev` parameter containing the current path, so that
-                                // we can navigate back to where the user came from.
-                                element.attr('href', $filter('reverseUrl')('ExternalLinkCtrl') + '?next=' + encodeURI(attrs.href) + '&prev=' + encodeURI($location.path()));
-
-                                element.bind('click', externalModal);
+                                $scope.cancel = function () {
+                                    $modalInstance.dismiss('cancel');
+                                };
                             }
-                        }
+                        ]
                     });
                 }
-            }
-        };
-    }]);
+            };
+
+            return ExternalLinkService;
+        }
+    ]);
+
+    module.directive('a', [
+        '$filter', '$location', '$modal', 'ExternalLinkService',
+        function ($filter, $location, $modal, ExternalLinkService) {
+            return {
+                restrict: 'E',
+                link: function (scope, element, attrs) {
+                    // If the link does not have an attribute to allow it to by-pass the warning.
+                    if (!attrs.allowExternal) {
+                        attrs.$observe('href', function (href) {
+                            // The click event may have been bound based on a
+                            // previous href value.
+                            var clickFunction = function (e) {
+                                ExternalLinkService.externalModal(e, attrs.href);
+                            };
+                            element.off('click', clickFunction);
+                            if (href) {
+                                // If the link is external.
+                                if (ExternalLinkService.isExternal(href)) {
+                                    // Rewrite the url to go to the external link route.
+                                    // Adds a `next` parameter containing the external link and
+                                    // a `prev` parameter containing the current path, so that
+                                    // we can navigate back to where the user came from.
+                                    element.attr('href', $filter('reverseUrl')('ExternalLinkCtrl') + '?next=' + encodeURI(attrs.href) + '&prev=' + encodeURI($location.path()));
+
+                                    element.on('click', clickFunction);
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+        }
+    ]);
 
 }(window.angular));
