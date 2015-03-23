@@ -1,6 +1,6 @@
 {
   "name": "angular-external-link-interceptor",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "homepage": "https://github.com/incuna/angular-external-link-interceptor",
   "main": "src/angular-external-link-interceptor.js",
   "authors": [
