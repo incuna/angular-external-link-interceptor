@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 1.1.0
+## 1.1.0
 
 * Add a service and move some functions from the directive into that. This allows for much easier overrides in projects via decorators.
 
