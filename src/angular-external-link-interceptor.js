@@ -98,7 +98,7 @@
                         ]
                     });
                 },
-                hrefChanged: function (element, newValue) {
+                bindModal: function (element, newValue) {
                     // The click event may have been bound based on a
                     // previous href value.
                     var clickFunction = function (e) {
@@ -133,7 +133,7 @@
                     // If the link does not have an attribute to allow it to by-pass the warning.
                     if (!attrs.allowExternal) {
                         attrs.$observe('href', function (newValue) {
-                            ExternalLinkService.hrefChanged(element, newValue);
+                            ExternalLinkService.bindModal(element, newValue);
                         });
                     }
                 }
