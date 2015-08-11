@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### Update
+
+* Include target attribute in template.
+
 ## 1.2.0
 
 * Pass through target attribute.

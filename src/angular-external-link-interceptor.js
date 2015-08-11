@@ -23,7 +23,7 @@
             $templateCache.put('templates/external_link/message.html',
                 '<p>You are now leaving this website.</p>' +
                 '<div>' +
-                    '<a ng-href="{{ externalUrl }}" allow-external="true">Continue</a>' +
+                    '<a ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
                     '<span ng-click="cancel()">Cancel</span>' +
                 '</div>'
             );
