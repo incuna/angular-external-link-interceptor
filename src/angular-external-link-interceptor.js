@@ -94,6 +94,11 @@
                                 $scope.cancel = function () {
                                     $modalInstance.dismiss('cancel');
                                 };
+
+                                // Pass through target attribute, so links that
+                                // should open in a new window can.
+                                var element = angular.element(e.currentTarget);
+                                $scope.target = element.attr('target');
                             }
                         ]
                     });
