@@ -1,8 +1,8 @@
 # CHANGELOG
 
-### Update
+### 1.2.1
 
-* Include target attribute in template.
+* Include target attribute in template. Required for 1.2.0 to work without the project overriding the template.
 
 ## 1.2.0
 
