@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### Update
+## 1.2.0
 
 * Pass through target attribute.
 
