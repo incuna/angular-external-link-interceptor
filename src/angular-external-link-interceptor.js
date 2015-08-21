@@ -17,13 +17,30 @@
         }
     ]);
 
+    module.provider('externalLinkConfig', function () {
+        var closeModalOnSuccess = false;
+
+        return {
+            $get: function () {
+                return {
+                    closeModalOnSuccess: function () {
+                        return closeModalOnSuccess;
+                    }
+                };
+            },
+            setCloseModalOnSuccess: function (value) {
+                closeModalOnSuccess = value;
+            }
+        };
+    });
+
     module.run([
         '$templateCache',
         function ($templateCache) {
             $templateCache.put('templates/external_link/message.html',
                 '<p>You are now leaving this website.</p>' +
                 '<div>' +
-                    '<a ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
+                    '<a ng-click="closeOnSuccess()" ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
                     '<span ng-click="cancel()">Cancel</span>' +
                 '</div>'
             );
@@ -87,12 +104,17 @@
                             }
                         },
                         controller: [
-                            '$scope', '$modalInstance', 'externalUrl',
-                            function ($scope, $modalInstance, externalUrl) {
+                            '$scope', '$modalInstance', 'externalUrl', 'externalLinkConfig',
+                            function ($scope, $modalInstance, externalUrl, externalLinkConfig) {
                                 $scope.externalUrl = externalUrl;
 
                                 $scope.cancel = function () {
                                     $modalInstance.dismiss('cancel');
+                                };
+                                $scope.closeOnSuccess = function () {
+                                    if (externalLinkConfig.closeModalOnSuccess) {
+                                        $modalInstance.dismiss('close');
+                                    }
                                 };
 
                                 // Pass through target attribute, so links that

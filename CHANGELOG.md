@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# Upcoming
+
+* Allow modal to close upon clicking "Continue" button based on an option.
+* Create config provider to provide `closeModalOnSuccess` boolean for the above. _NB:_ requires update to `message.html` template in projects.
+
 ### 1.2.1
 
 * Include target attribute in template. Required for 1.2.0 to work without the project overriding the template.
