@@ -3,7 +3,7 @@
 
     var module = angular.module('externalLinkInterceptor', [
         'ngRoute',
-        'ui.bootstrap'
+        'ui.bootstrap.modal'
     ]);
 
     module.config([
