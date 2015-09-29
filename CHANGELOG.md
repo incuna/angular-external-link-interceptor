@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### Upcoming
+
+* Load only ui.bootstrap.modal instead of the whole module
+
 ### 1.2.1
 
 * Include target attribute in template. Required for 1.2.0 to work without the project overriding the template.
