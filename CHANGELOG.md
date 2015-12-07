@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.2.3
+
+* Fix currentTarget not having a value when used in the modal.
+
 ### 1.2.2
 
 * Load only ui.bootstrap.modal instead of the whole module
