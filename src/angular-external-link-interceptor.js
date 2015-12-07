@@ -78,6 +78,9 @@
                 externalModal: function (e, href) {
                     e.preventDefault();
 
+                    // Because the model is opened later the currentTarget mey get set to null. 
+                    var currentTarget = e.currentTarget;
+
                     // Open a bootstrap-ui modal.
                     $modal.open({
                         templateUrl: 'templates/external_link/message.html',
@@ -97,7 +100,7 @@
 
                                 // Pass through target attribute, so links that
                                 // should open in a new window can.
-                                var element = angular.element(e.currentTarget);
+                                var element = angular.element(currentTarget);
                                 $scope.target = element.attr('target');
                             }
                         ]
