@@ -51,7 +51,7 @@
 
     module.service('ExternalLinkService', [
         '$filter', '$location', '$uibModal',
-        function ($filter, $location, $modal) {
+        function ($filter, $location, $uibModal) {
 
             var ExternalLinkService = {
                 externalLinkRE: new RegExp(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/),
