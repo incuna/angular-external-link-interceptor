@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### upcoming
+
+* Updating bootstrap to version 1.1.0 and angular to 1.4
+
 ### 1.2.3
 
 * Fix currentTarget not having a value when used in the modal.

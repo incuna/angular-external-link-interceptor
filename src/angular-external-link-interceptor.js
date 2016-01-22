@@ -50,7 +50,7 @@
     ]);
 
     module.service('ExternalLinkService', [
-        '$filter', '$location', '$modal',
+        '$filter', '$location', '$uibModal',
         function ($filter, $location, $modal) {
 
             var ExternalLinkService = {
@@ -82,7 +82,7 @@
                     var currentTarget = e.currentTarget;
 
                     // Open a bootstrap-ui modal.
-                    $modal.open({
+                    $uibModal.open({
                         templateUrl: 'templates/external_link/message.html',
                         resolve: {
                             externalUrl: function () {
