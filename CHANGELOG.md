@@ -2,7 +2,7 @@
 
 ### upcoming
 
-* Updating bootstrap to version 1.1.0 and angular to 1.4
+* BREAKING CHANGE: Updating bootstrap to version 1.1.0 and angular to 1.4
 
 ### 1.2.3
 
