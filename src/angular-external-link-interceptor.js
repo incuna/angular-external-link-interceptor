@@ -50,8 +50,8 @@
     ]);
 
     module.service('ExternalLinkService', [
-        '$filter', '$location', '$modal',
-        function ($filter, $location, $modal) {
+        '$filter', '$location', '$uibModal',
+        function ($filter, $location, $uibModal) {
 
             var ExternalLinkService = {
                 externalLinkRE: new RegExp(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/),
@@ -82,7 +82,7 @@
                     var currentTarget = e.currentTarget;
 
                     // Open a bootstrap-ui modal.
-                    $modal.open({
+                    $uibModal.open({
                         templateUrl: 'templates/external_link/message.html',
                         resolve: {
                             externalUrl: function () {
