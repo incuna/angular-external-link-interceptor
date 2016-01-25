@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### upcoming
+### 2.0.0
 
 * BREAKING CHANGE: Updating bootstrap to version 1.1.0 and angular to 1.4
 
