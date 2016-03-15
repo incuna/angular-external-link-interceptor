@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 2.0.1
+
+* Fix bootstrap syntax  $modalInstance should be $uibModalInstance
+
 ### 2.0.0
 
 * BREAKING CHANGE: Updating bootstrap to version 1.1.0 and angular to 1.4
