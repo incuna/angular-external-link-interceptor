@@ -90,12 +90,12 @@
                             }
                         },
                         controller: [
-                            '$scope', '$modalInstance', 'externalUrl',
-                            function ($scope, $modalInstance, externalUrl) {
+                            '$scope', '$uibModalInstance', 'externalUrl',
+                            function ($scope, $uibModalInstance, externalUrl) {
                                 $scope.externalUrl = externalUrl;
 
                                 $scope.cancel = function () {
-                                    $modalInstance.dismiss('cancel');
+                                    $uibModalInstance.dismiss('cancel');
                                 };
 
                                 // Pass through target attribute, so links that
