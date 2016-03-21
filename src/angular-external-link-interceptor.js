@@ -139,6 +139,7 @@
             return {
                 restrict: 'E',
                 link: function (scope, element, attrs) {
+                    // Storing the current directives clickHandler so it can be properly unbound.
                     var clickHandler;
 
                     // If the link does not have an attribute to allow it to by-pass the warning.
