@@ -144,7 +144,8 @@
                     // If the link does not have an attribute to allow it to by-pass the warning.
                     if (!attrs.allowExternal) {
                         attrs.$observe('href', function (newValue) {
-                            clickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
+                            var newClickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
+                            clickHandler = newClickHandler;
                         });
                     }
                 }
