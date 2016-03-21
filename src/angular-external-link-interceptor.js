@@ -23,8 +23,8 @@
             $templateCache.put('templates/external_link/message.html',
                 '<p>You are now leaving this website.</p>' +
                 '<div>' +
-                    '<a ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
-                    '<span ng-click="cancel()">Cancel</span>' +
+                    '<a ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true" ng-click="dismissModal()">Continue</a>' +
+                    '<span ng-click="dismissModal()">Cancel</span>' +
                 '</div>'
             );
 
@@ -94,7 +94,7 @@
                             function ($scope, $uibModalInstance, externalUrl) {
                                 $scope.externalUrl = externalUrl;
 
-                                $scope.cancel = function () {
+                                $scope.dismissModal = function () {
                                     $uibModalInstance.dismiss('cancel');
                                 };
 
@@ -106,13 +106,13 @@
                         ]
                     });
                 },
-                bindModal: function (element, newValue) {
+                bindModal: function (element, newValue, clickFunction) {
                     // The click event may have been bound based on a
                     // previous href value.
+                    element.off('click', clickFunction);
                     var clickFunction = function (e) {
                         ExternalLinkService.externalModal(e, newValue);
                     };
-                    element.off('click', clickFunction);
                     if (newValue) {
                         // If the link is external.
                         if (ExternalLinkService.isExternal(newValue)) {
@@ -125,6 +125,7 @@
                             element.on('click', clickFunction);
                         }
                     }
+                    return clickFunction;
                 }
             };
 
@@ -138,10 +139,12 @@
             return {
                 restrict: 'E',
                 link: function (scope, element, attrs) {
+                    var clickHandler;
+
                     // If the link does not have an attribute to allow it to by-pass the warning.
                     if (!attrs.allowExternal) {
                         attrs.$observe('href', function (newValue) {
-                            ExternalLinkService.bindModal(element, newValue);
+                            clickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
                         });
                     }
                 }
