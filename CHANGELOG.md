@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 2.1.0
+### Upcoming
 
 * BUGFIX: Stop bindModal function creating a new instance of the clickFunction.
 * Dismiss modal when choosing continue.
