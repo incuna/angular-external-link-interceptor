@@ -106,10 +106,10 @@
                         ]
                     });
                 },
-                bindModal: function (element, newValue, clickFunction) {
+                bindModal: function (element, newValue, previousClickFunction) {
                     // The click event may have been bound based on a
                     // previous href value.
-                    element.off('click', clickFunction);
+                    element.off('click',  previousClickFunction);
                     var clickFunction = function (e) {
                         ExternalLinkService.externalModal(e, newValue);
                     };
