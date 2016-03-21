@@ -23,8 +23,8 @@
             $templateCache.put('templates/external_link/message.html',
                 '<p>You are now leaving this website.</p>' +
                 '<div>' +
-                    '<a ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true" ng-click="dismissModal()">Continue</a>' +
-                    '<span ng-click="dismissModal()">Cancel</span>' +
+                    '<a ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
+                    '<span ng-click="cancel()">Cancel</span>' +
                 '</div>'
             );
 
@@ -94,7 +94,7 @@
                             function ($scope, $uibModalInstance, externalUrl) {
                                 $scope.externalUrl = externalUrl;
 
-                                $scope.dismissModal = function () {
+                                $scope.cancel = function () {
                                     $uibModalInstance.dismiss('cancel');
                                 };
 
