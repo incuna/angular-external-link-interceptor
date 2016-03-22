@@ -3,7 +3,6 @@
 ### Upcoming
 
 * BUGFIX: Stop bindModal function creating a new instance of the clickFunction.
-* Dismiss modal when choosing continue.
 
 ### 2.0.1
 
