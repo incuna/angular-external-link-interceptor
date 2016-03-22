@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### Upcoming
+### 2.0.2
 
 * BUGFIX: Stop bindModal function creating a new instance of the clickFunction.
 
