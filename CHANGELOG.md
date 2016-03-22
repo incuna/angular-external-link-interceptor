@@ -1,8 +1,12 @@
 # CHANGELOG
 
+### Upcoming
+
+* BUGFIX: Stop bindModal function creating a new instance of the clickFunction.
+
 ### 2.0.1
 
-* Fix bootstrap syntax  $modalInstance should be $uibModalInstance
+* Fix bootstrap syntax $modalInstance should be $uibModalInstance
 
 ### 2.0.0
 

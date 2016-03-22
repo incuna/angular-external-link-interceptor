@@ -106,13 +106,13 @@
                         ]
                     });
                 },
-                bindModal: function (element, newValue) {
+                bindModal: function (element, newValue, previousClickFunction) {
                     // The click event may have been bound based on a
                     // previous href value.
+                    element.off('click',  previousClickFunction);
                     var clickFunction = function (e) {
                         ExternalLinkService.externalModal(e, newValue);
                     };
-                    element.off('click', clickFunction);
                     if (newValue) {
                         // If the link is external.
                         if (ExternalLinkService.isExternal(newValue)) {
@@ -125,6 +125,7 @@
                             element.on('click', clickFunction);
                         }
                     }
+                    return clickFunction;
                 }
             };
 
@@ -138,10 +139,14 @@
             return {
                 restrict: 'E',
                 link: function (scope, element, attrs) {
+                    // Storing the current directives clickHandler so it can be properly unbound.
+                    var clickHandler;
+
                     // If the link does not have an attribute to allow it to by-pass the warning.
                     if (!attrs.allowExternal) {
                         attrs.$observe('href', function (newValue) {
-                            ExternalLinkService.bindModal(element, newValue);
+                            var newClickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
+                            clickHandler = newClickHandler;
                         });
                     }
                 }
