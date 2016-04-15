@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### Upcoming
+### 2.0.3
 
 * Upgrade Angular compatibility to include 1.5.
 * Upgrade Angular-route compatibility to include 1.5.
