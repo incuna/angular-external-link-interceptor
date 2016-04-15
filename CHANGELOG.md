@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Upcoming
+
+* Upgrade Angular compatibility to include 1.5.
+* Upgrade Angular-route compatibility to include 1.5.
+* Allow bootstrap to install any version less than 1.3
+
 ### 2.0.2
 
 * BUGFIX: Stop bindModal function creating a new instance of the clickFunction.
