@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### upcoming
+
+* Allow bootstrap to install up to anything bigger than or equal to 1.1.0 and less than 1.3
+
 ### 2.0.3
 
 * Upgrade Angular compatibility to include 1.5.
