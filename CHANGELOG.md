@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### upcoming
+### 2.0.4
 
 * Allow bootstrap to install up to anything bigger than or equal to 1.1.0 and less than 1.3
 
