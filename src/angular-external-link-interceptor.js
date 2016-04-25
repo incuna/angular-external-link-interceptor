@@ -3,7 +3,7 @@
 
     var module = angular.module('externalLinkInterceptor', [
         'ngRoute',
-        'ui.bootstrap'
+        'ui.bootstrap.modal'
     ]);
 
     module.config([
@@ -67,8 +67,8 @@
     ]);
 
     module.service('ExternalLinkService', [
-        '$filter', '$location', '$modal',
-        function ($filter, $location, $modal) {
+        '$filter', '$location', '$uibModal',
+        function ($filter, $location, $uibModal) {
 
             var ExternalLinkService = {
                 externalLinkRE: new RegExp(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/),
@@ -95,8 +95,11 @@
                 externalModal: function (e, href) {
                     e.preventDefault();
 
+                    // Because the model is opened later the currentTarget mey get set to null. 
+                    var currentTarget = e.currentTarget;
+
                     // Open a bootstrap-ui modal.
-                    $modal.open({
+                    $uibModal.open({
                         templateUrl: 'templates/external_link/message.html',
                         resolve: {
                             externalUrl: function () {
@@ -104,12 +107,12 @@
                             }
                         },
                         controller: [
-                            '$scope', '$modalInstance', 'externalUrl', 'externalLinkConfig',
-                            function ($scope, $modalInstance, externalUrl, externalLinkConfig) {
+                            '$scope', '$uibModalInstance', 'externalUrl', 'externalLinkConfig',
+                            function ($scope, $uibModalInstance, externalUrl, externalLinkConfig) {
                                 $scope.externalUrl = externalUrl;
 
                                 $scope.cancel = function () {
-                                    $modalInstance.dismiss('cancel');
+                                    $uibModalInstance.dismiss('cancel');
                                 };
                                 $scope.closeOnSuccess = function () {
                                     if (externalLinkConfig.closeModalOnSuccess) {
@@ -119,19 +122,19 @@
 
                                 // Pass through target attribute, so links that
                                 // should open in a new window can.
-                                var element = angular.element(e.currentTarget);
+                                var element = angular.element(currentTarget);
                                 $scope.target = element.attr('target');
                             }
                         ]
                     });
                 },
-                bindModal: function (element, newValue) {
+                bindModal: function (element, newValue, previousClickFunction) {
                     // The click event may have been bound based on a
                     // previous href value.
+                    element.off('click',  previousClickFunction);
                     var clickFunction = function (e) {
                         ExternalLinkService.externalModal(e, newValue);
                     };
-                    element.off('click', clickFunction);
                     if (newValue) {
                         // If the link is external.
                         if (ExternalLinkService.isExternal(newValue)) {
@@ -144,6 +147,7 @@
                             element.on('click', clickFunction);
                         }
                     }
+                    return clickFunction;
                 }
             };
 
@@ -157,10 +161,14 @@
             return {
                 restrict: 'E',
                 link: function (scope, element, attrs) {
+                    // Storing the current directives clickHandler so it can be properly unbound.
+                    var clickHandler;
+
                     // If the link does not have an attribute to allow it to by-pass the warning.
                     if (!attrs.allowExternal) {
                         attrs.$observe('href', function (newValue) {
-                            ExternalLinkService.bindModal(element, newValue);
+                            var newClickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
+                            clickHandler = newClickHandler;
                         });
                     }
                 }

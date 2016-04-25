@@ -5,7 +5,37 @@
 * Allow modal to close upon clicking "Continue" button based on an option.
 * Create config provider to provide `closeModalOnSuccess` boolean for the above. _NB:_ requires update to `message.html` template in projects.
 
-### 1.2.1
+### 2.0.4
+
+* Allow bootstrap to install up to anything bigger than or equal to 1.1.0 and less than 1.3
+
+### 2.0.3
+
+* Upgrade Angular compatibility to include 1.5.
+* Upgrade Angular-route compatibility to include 1.5.
+* Allow bootstrap to install any version less than 1.3
+
+### 2.0.2
+
+* BUGFIX: Stop bindModal function creating a new instance of the clickFunction.
+
+### 2.0.1
+
+* Fix bootstrap syntax $modalInstance should be $uibModalInstance
+
+### 2.0.0
+
+* BREAKING CHANGE: Updating bootstrap to version 1.1.0 and angular to 1.4
+
+### 1.2.3
+
+* Fix currentTarget not having a value when used in the modal.
+
+### 1.2.2
+
+* Load only ui.bootstrap.modal instead of the whole module
+
+## 1.2.1
 
 * Include target attribute in template. Required for 1.2.0 to work without the project overriding the template.
 
