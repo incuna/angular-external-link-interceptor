@@ -23,9 +23,7 @@
         return {
             $get: function () {
                 return {
-                    closeModalOnSuccess: function () {
-                        return closeModalOnSuccess;
-                    }
+                    closeModalOnSuccess: closeModalOnSuccess
                 };
             },
             setCloseModalOnSuccess: function (value) {
