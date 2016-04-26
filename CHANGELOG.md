@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# Upcoming
+### 2.1.0
 
 * Allow modal to close upon clicking "Continue" button based on an option.
 * Create config provider to provide `closeModalOnSuccess` boolean for the above. _NB:_ requires update to `message.html` template in projects.
