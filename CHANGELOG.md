@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# Upcoming
+
+* Allow modal to close upon clicking "Continue" button based on an option.
+* Create config provider to provide `closeModalOnSuccess` boolean for the above. _NB:_ requires update to `message.html` template in projects.
+
 ### 2.0.4
 
 * Allow bootstrap to install up to anything bigger than or equal to 1.1.0 and less than 1.3
