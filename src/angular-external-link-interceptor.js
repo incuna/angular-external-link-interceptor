@@ -114,7 +114,7 @@
                                 };
                                 $scope.closeOnSuccess = function () {
                                     if (externalLinkConfig.closeModalOnSuccess) {
-                                        $modalInstance.dismiss('close');
+                                        $uibModalInstance.dismiss('close');
                                     }
                                 };
 
