@@ -81,7 +81,7 @@ module.exports = function (grunt) {
         watch: {
             templates: {
                 files: '<%= config.modules %>/**/*.html',
-                tasks: 'ngtemplates'
+                tasks: 'build'
             },
             scripts: {
                 files: '<%= config.modules %>/**/scripts/**/*.js',
