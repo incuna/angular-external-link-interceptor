@@ -126,53 +126,14 @@ module.exports = function (grunt) {
         'watch'
     ]);
 
-    grunt.registerTask('lint', 'Run the JS linters.', [
+    grunt.registerTask('lint', [
         'eslint',
         'jscs'
     ]);
 
-    grunt.registerTask('setup', 'Setup packages and compile files.', [
-        'build'
-    ]);
-
-    grunt.registerTask('test', 'Run the tests.', function (env) {
-        var karmaTarget = 'dev';
-        if (grunt.option('debug')) {
-            karmaTarget = 'debug';
-        }
-        if (grunt.option('verbose')) {
-            karmaTask = 'verbose';
-        }
-        if (env === 'ci' || env === 'travis') {
-            karmaTarget = 'ci';
-        }
-        grunt.task.run([
-            'setup',
-            'force:lint',
-            'force:karma:' + karmaTarget,
-            'errorcodes'
-        ]);
-    });
-
-    grunt.registerTask('travis', 'Run the tests in Travis', [
-        'test:travis'
-    ]);
-
-    grunt.registerTask('build', 'Concat and uglify', [
+    grunt.registerTask('build', [
         'ngtemplates',
         'concat',
         'uglify'
     ]);
-
-    // This is used in combination with grunt-force-task to make the most of a
-    // Travis build, so all tasks can run but the build will fail if any of the
-    // tasks failed/errored.
-    grunt.registerTask('errorcodes', 'Fatally error if any errors or warnings have occurred but Grunt has been forced to continue', function () {
-        grunt.log.writeln('errorcount: ' + grunt.fail.errorcount);
-        grunt.log.writeln('warncount: ' + grunt.fail.warncount);
-        if (grunt.fail.warncount > 0 || grunt.fail.errorcount > 0) {
-            grunt.fatal('Errors have occurred.');
-        }
-    });
-
 };
