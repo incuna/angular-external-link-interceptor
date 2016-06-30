@@ -1,67 +1,9 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('externalLinkInterceptor', [
+    var module = angular.module('angular-external-link-interceptor.external-link-service', [
         'ngRoute',
         'ui.bootstrap.modal'
-    ]);
-
-    module.config([
-        '$routeProvider',
-        function ($routeProvider) {
-            $routeProvider
-                .when('/external-link/', {
-                    templateUrl: 'templates/external_link/page.html',
-                    controller: 'ExternalLinkCtrl'
-                });
-        }
-    ]);
-
-    module.provider('externalLinkConfig', function () {
-        var closeModalOnSuccess = false;
-
-        return {
-            $get: function () {
-                return {
-                    closeModalOnSuccess: closeModalOnSuccess
-                };
-            },
-            setCloseModalOnSuccess: function (value) {
-                closeModalOnSuccess = value;
-            }
-        };
-    });
-
-    module.run([
-        '$templateCache',
-        function ($templateCache) {
-            $templateCache.put('templates/external_link/message.html',
-                '<p>You are now leaving this website.</p>' +
-                '<div>' +
-                    '<a ng-click="closeOnSuccess()" ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
-                    '<span ng-click="cancel()">Cancel</span>' +
-                '</div>'
-            );
-
-            $templateCache.put('templates/external_link/page.html',
-                '<div ng-include src="\'templates/external_link/page.html\'"></div>'
-            );
-        }
-    ]);
-
-    module.controller('ExternalLinkCtrl', [
-        '$scope', '$location',
-        function ($scope, $location) {
-            $scope.externalUrl = $location.$$search.next;
-
-            $scope.cancel = function () {
-                if ($location.$$search.prev) {
-                    $location.url($location.$$search.prev);
-                } else {
-                    $location.url('/');
-                }
-            };
-        }
     ]);
 
     module.service('ExternalLinkService', [
@@ -93,7 +35,7 @@
                 externalModal: function (e, href) {
                     e.preventDefault();
 
-                    // Because the model is opened later the currentTarget mey get set to null. 
+                    // Because the model is opened later the currentTarget mey get set to null.
                     var currentTarget = e.currentTarget;
 
                     // Open a bootstrap-ui modal.
@@ -150,27 +92,6 @@
             };
 
             return ExternalLinkService;
-        }
-    ]);
-
-    module.directive('a', [
-        'ExternalLinkService',
-        function (ExternalLinkService) {
-            return {
-                restrict: 'E',
-                link: function (scope, element, attrs) {
-                    // Storing the current directives clickHandler so it can be properly unbound.
-                    var clickHandler;
-
-                    // If the link does not have an attribute to allow it to by-pass the warning.
-                    if (!attrs.allowExternal) {
-                        attrs.$observe('href', function (newValue) {
-                            var newClickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
-                            clickHandler = newClickHandler;
-                        });
-                    }
-                }
-            };
         }
     ]);
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+# Upcoming
+
+* BREAKING CHANGE: Move code to seperate files.
+* Add build task to create a minified file and a concatenated file.
+* Add file linting using eslint version 18.1.0. https://github.com/sindresorhus/grunt-eslint.
+* Update readme with release instructions.
+
 ### 2.1.0
 
 * Allow modal to close upon clicking "Continue" button based on an option.
