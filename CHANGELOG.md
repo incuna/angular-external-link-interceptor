@@ -3,6 +3,7 @@
 # Upcoming
 
 * BREAKING CHANGE: Split code in src folder into multiple files.
+* Add linting.
 
 ### 2.1.0
 
