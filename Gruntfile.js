@@ -34,6 +34,23 @@ module.exports = function (grunt) {
 
     require('time-grunt')(grunt);
 
+    var concatConfig = {
+        target: {
+            src: [
+                'modules/**/**/*.js'
+            ],
+            dest: 'dist/angular-external-link-intercepter.js'
+        }
+    };
+
+    var uglifyConfig = {
+        target: {
+            files: {
+                'dist/angular-external-link-intercepter.min.js': 'dist/angular-external-link-intercepter.js'
+            }
+        }
+    };
+
     grunt.initConfig({
         // Configurable paths
         config: {
@@ -50,6 +67,10 @@ module.exports = function (grunt) {
             templates: {
                 files: 'modules/**/*.html',
                 tasks: 'ngtemplates'
+            },
+            scripts: {
+                files: 'modules/**/scripts/**/*.js',
+                tasks: ['build', 'eslint']
             }
         },
         eslint: {
@@ -80,7 +101,9 @@ module.exports = function (grunt) {
                 }
             },
             projectTemplates
-        )
+        ),
+        concat: concatConfig,
+        uglify: uglifyConfig
     });
 
     grunt.registerTask('default', [
@@ -98,6 +121,8 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('build', [
-        'ngtemplates'
+        'ngtemplates',
+        'concat',
+        'uglify'
     ]);
 };
