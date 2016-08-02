@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('angular-external-link-interceptor.a', []);
+    var module = angular.module('angular-external-link-interceptor.anchor', []);
 
     module.directive('a', [
         'ExternalLinkService',
