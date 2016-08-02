@@ -1,6 +1,29 @@
 module.exports = function (grunt) {
     'use strict';
 
+    var _ = require('lodash');
+    var fs = require('fs');
+
+    var projectTemplates = {};
+
+    var modulesDir = 'modules/';
+    var modules = fs.readdirSync(modulesDir).filter(function (file) {
+        return fs.statSync(modulesDir + file).isDirectory();
+    });
+
+    _.each(modules, function (name) {
+        var modulePath = 'angular-' + name + '.templates';
+        projectTemplates[name] = {
+            cwd: 'modules/' + name,
+            src: '**/*.html',
+            dest: 'modules/' + name + '/templates.js',
+            options: {
+                module: modulePath,
+                standalone: true
+            }
+        };
+    });
+
     if (grunt.option('help')) {
         require('load-grunt-tasks')(grunt);
     } else {
@@ -23,6 +46,12 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        watch: {
+            templates: {
+                files: 'modules/**/*.html',
+                tasks: 'ngtemplates'
+            }
+        },
         eslint: {
             all: {
                 options: {
@@ -36,8 +65,28 @@ module.exports = function (grunt) {
                 config: '.jscsrc'
             },
             src: '<%= config.files.lint %>'
-        }
+        },
+        ngtemplates: _.extend({
+                options: {
+                    htmlmin: {
+                        collapseBooleanAttributes: true,
+                        collapseWhitespace: true,
+                        removeAttributeQuotes: true,
+                        removeComments: true,
+                        removeEmptyAttributes: true,
+                        removeScriptTypeAttributes: true,
+                        removeStyleLinkTypeAttributes: true
+                    }
+                }
+            },
+            projectTemplates
+        )
     });
+
+    grunt.registerTask('default', [
+        'build',
+        'watch'
+    ]);
 
     grunt.registerTask('lint', [
         'eslint',
@@ -48,4 +97,7 @@ module.exports = function (grunt) {
         'lint'
     ]);
 
+    grunt.registerTask('build', [
+        'ngtemplates'
+    ]);
 };
