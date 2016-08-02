@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Upcoming
+
+* BREAKING CHANGE: Split code in src folder into multiple files.
+
 ### 2.1.0
 
 * Allow modal to close upon clicking "Continue" button based on an option.
