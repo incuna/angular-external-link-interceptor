@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# Upcoming
+# 3.0.0
 
 * BREAKING CHANGE: Split code in src folder into multiple files.
 * Add linting.
