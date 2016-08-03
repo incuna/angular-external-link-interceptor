@@ -1,21 +1,70 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('externalLinkInterceptor', [
-        'ngRoute',
-        'ui.bootstrap.modal'
-    ]);
+    var module = angular.module('angular-external-link-interceptor.controller', []);
 
-    module.config([
-        '$routeProvider',
-        function ($routeProvider) {
-            $routeProvider
-                .when('/external-link/', {
-                    templateUrl: 'templates/external_link/page.html',
-                    controller: 'ExternalLinkCtrl'
-                });
+    module.controller('ExternalLinkCtrl', [
+        '$scope', '$location',
+        function ($scope, $location) {
+            $scope.externalUrl = $location.$$search.next;
+
+            $scope.cancel = function () {
+                if ($location.$$search.prev) {
+                    $location.url($location.$$search.prev);
+                } else {
+                    $location.url('/');
+                }
+            };
         }
     ]);
+
+}(window.angular));
+
+(function (angular) {
+    'use strict';
+
+    var module = angular.module('angular-external-link-interceptor.anchor', []);
+
+    module.directive('a', [
+        'ExternalLinkService',
+        function (ExternalLinkService) {
+            return {
+                restrict: 'E',
+                link: function (scope, element, attrs) {
+                    // Storing the current directives clickHandler so it can be properly unbound.
+                    var clickHandler;
+
+                    // If the link does not have an attribute to allow it to by-pass the warning.
+                    if (!attrs.allowExternal) {
+                        attrs.$observe('href', function (newValue) {
+                            var newClickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
+                            clickHandler = newClickHandler;
+                        });
+                    }
+                }
+            };
+        }
+    ]);
+
+}(window.angular));
+
+(function (angular) {
+    'use strict';
+
+    angular.module('externalLinkInterceptor', [
+        'angular-external-link-interceptor.controller',
+        'angular-external-link-interceptor.anchor',
+        'angular-external-link-interceptor.external-link-config',
+        'angular-external-link-interceptor.external-link-service',
+        'angular-external-link-intercepter.templates'
+    ]);
+
+}(window.angular));
+
+(function (angular) {
+    'use strict';
+
+    var module = angular.module('angular-external-link-interceptor.external-link-config', []);
 
     module.provider('externalLinkConfig', function () {
         var closeModalOnSuccess = false;
@@ -32,36 +81,14 @@
         };
     });
 
-    module.run([
-        '$templateCache',
-        function ($templateCache) {
-            $templateCache.put('templates/external_link/message.html',
-                '<p>You are now leaving this website.</p>' +
-                '<div>' +
-                    '<a ng-click="closeOnSuccess()" ng-href="{{ externalUrl }}" target="{{ target }}" allow-external="true">Continue</a>' +
-                    '<span ng-click="cancel()">Cancel</span>' +
-                '</div>'
-            );
+}(window.angular));
 
-            $templateCache.put('templates/external_link/page.html',
-                '<div ng-include src="\'templates/external_link/page.html\'"></div>'
-            );
-        }
-    ]);
+(function (angular) {
+    'use strict';
 
-    module.controller('ExternalLinkCtrl', [
-        '$scope', '$location',
-        function ($scope, $location) {
-            $scope.externalUrl = $location.$$search.next;
-
-            $scope.cancel = function () {
-                if ($location.$$search.prev) {
-                    $location.url($location.$$search.prev);
-                } else {
-                    $location.url('/');
-                }
-            };
-        }
+    var module = angular.module('angular-external-link-interceptor.external-link-service', [
+        'ngRoute',
+        'ui.bootstrap.modal'
     ]);
 
     module.service('ExternalLinkService', [
@@ -93,7 +120,7 @@
                 externalModal: function (e, href) {
                     e.preventDefault();
 
-                    // Because the model is opened later the currentTarget mey get set to null. 
+                    // Because the model is opened later the currentTarget mey get set to null.
                     var currentTarget = e.currentTarget;
 
                     // Open a bootstrap-ui modal.
@@ -153,25 +180,38 @@
         }
     ]);
 
-    module.directive('a', [
-        'ExternalLinkService',
-        function (ExternalLinkService) {
-            return {
-                restrict: 'E',
-                link: function (scope, element, attrs) {
-                    // Storing the current directives clickHandler so it can be properly unbound.
-                    var clickHandler;
+}(window.angular));
 
-                    // If the link does not have an attribute to allow it to by-pass the warning.
-                    if (!attrs.allowExternal) {
-                        attrs.$observe('href', function (newValue) {
-                            var newClickHandler = ExternalLinkService.bindModal(element, newValue, clickHandler);
-                            clickHandler = newClickHandler;
-                        });
-                    }
-                }
-            };
+(function (angular) {
+    'use strict';
+
+    var module = angular.module('angular-external-link-interceptor.routes', [
+        'ngRoute'
+    ]);
+
+    module.config([
+        '$routeProvider',
+        function ($routeProvider) {
+            $routeProvider
+                .when('/external-link/', {
+                    templateUrl: 'templates/external_link/page.html',
+                    controller: 'ExternalLinkCtrl'
+                });
         }
     ]);
 
 }(window.angular));
+
+angular.module('angular-external-link-intercepter.templates', []).run(['$templateCache', function($templateCache) {
+  'use strict';
+
+  $templateCache.put('templates/external_link/message.html',
+    "<p>You are now leaving this website.</p><div><a ng-click=closeOnSuccess() ng-href=\"{{ externalUrl }}\" target=\"{{ target }}\" allow-external=true>Continue</a> <span ng-click=cancel()>Cancel</span></div>"
+  );
+
+
+  $templateCache.put('templates/external_link/page.html',
+    "<div ng-include src=\"'templates/external_link/page.html'\"></div>"
+  );
+
+}]);

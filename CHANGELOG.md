@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# Upcoming
+
+* BREAKING CHANGE: Split code in src folder into multiple files.
+* Add linting.
+* Add grunt tasks to compile the templates into a js file. Also combine all the js files into a minified and non minified file.
+
 ### 2.1.0
 
 * Allow modal to close upon clicking "Continue" button based on an option.
